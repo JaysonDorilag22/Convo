@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 export default function Login() {
   // State to store username and password for login
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  const navigate = useNavigate();
 
   // Async function to handle user login
   async function handleLogin(e) {
@@ -18,6 +19,7 @@ export default function Login() {
       });
 
       // Handle the response, e.g., set user authentication state
+      navigate('/Chatpage');
       console.log("Login successful", response.data);
     } catch (error) {
       // Handle errors, e.g., display an error message to the user

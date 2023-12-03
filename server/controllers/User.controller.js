@@ -85,3 +85,47 @@ export const login = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+export const getProfile = async (req, res) => {
+    try {
+        // Extract user ID from the decoded JWT token
+        const userId = req.user.userId;
+
+        // Retrieve user profile from the database
+        const user = await User.findById(userId);
+
+        if (!user) {
+            // Handle the case where the user is not found
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Return the user profile information
+        res.status(200).json({
+            id: user._id,
+            username: user.username,
+            // Add other profile fields as needed
+        });
+    } catch (err) {
+        // Handle errors, log them, and send an appropriate response
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+  export const getAllUsers = async (req, res) => {
+    try {
+        // Retrieve all users from the database
+        const users = await User.find({}, '_id username'); // You can specify the fields you want to retrieve
+
+        // Return the list of users
+        res.status(200).json(users);
+    } catch (err) {
+        // Handle errors, log them, and send an appropriate response
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+export const logout = (req, res) => {
+    res.cookie('token', '', { expires: new Date(0), httpOnly: true, secure: true, sameSite: 'none' }).status(200).json({ success: true });
+  };
